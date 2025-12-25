@@ -1,0 +1,20 @@
+{
+    "paragraphs": [
+        {
+            "name": "Laser",
+            "text": "A laser is a device that emits light through a process of optical amplification based on the stimulated emission of electromagnetic radiation. The word laser originated as an acronym for light amplification by stimulated emission of radiation."
+        },
+        {
+            "name": "Pokemon",
+            "text": "Players are tasked with filling their Pokédex by catching different Pokémon species and evolving them. They are also tasked to complete eight gym challenges and defeat the Elite Four and the Pokémon League Champion by battling their Pokémon."
+        },
+        {
+            "name": "Orca",
+            "text": "Orcas are apex predators with a diverse diet. Individual populations often specialize in particular types of prey, including bony fish, sharks, rays, and marine mammals such as seals, dolphins, and whales. They are highly social, with some populations forming stable matrilineal family groups."
+        },
+        {
+            "name": "Coffee",
+            "text": "Coffee is a beverage brewed from roasted, ground coffee beans. Darkly colored, bitter, and slightly acidic, coffee has a stimulating effect on humans, primarily due to its caffeine content, but decaffeinated coffee is also commercially available."
+        }
+    ]
+}

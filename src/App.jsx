@@ -1,34 +1,54 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import data from './data/paragraphs.json'
+import Timer from './components/Timer'
+import Typer from './components/Typer'
+import Text from './components/Text'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  const texts = data.paragraphs
+  const [paragraph, setParagraph] = useState(() => {
+    return texts[Math.floor(Math.random() * texts.length)].text
+  })
+  const [seconds, setSeconds] = useState(60)
+  const [start, setStart] = useState(false)
+  const [typing, setTyping] = useState('')
+
+
+  const newGame = () => {
+    setParagraph(texts[Math.floor(Math.random() * texts.length)].text)
+    setStart(false)
+    setSeconds(60)
+  }
+
+  return(
+    <div className='game-box'>
+      <div className='timer'>
+      <Timer startTime={start} seconds={seconds} setSeconds={setSeconds}/>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className='text'>
+        <Text paragraph={paragraph}/>
+        <div className='typer'>
+          <Typer typing={typing} />
+          </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <label>
+          <input 
+          type="text"
+          value={typing}
+          onChange={({ target }) => {
+            setTyping(target.value)
+            setStart(true)
+          }}
+          />
+      </label>
+      <div className='button-row'>
+        <button className='new-game' onClick={newGame}>
+        New game
+      </button>
+      </div>
+  </div>
   )
 }
 
