@@ -3,13 +3,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;  
-  background-color: rgb(27, 27, 27);
+  background-color: #262b36;
   width: 800px;
   height: 600px;
-}
-
-.timer {
-  color: white;
 }
 
 .textbox{
