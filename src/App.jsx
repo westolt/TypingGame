@@ -36,7 +36,16 @@ function App() {
           type="text"
           value={typing}
           onChange={({ target }) => {
-            setTyping(target.value)
+            const value = target.value
+            const firstErrorIndex = value
+              .split('')
+              .findIndex((char, i) => char !== paragraph[i])
+
+            if (firstErrorIndex !== -1 && value.length > firstErrorIndex + 1) {
+              return
+            }
+            
+            setTyping(value)
             setStart(true)
           }}
           />
