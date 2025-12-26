@@ -1,6 +1,8 @@
 .game-box {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;  
   background-color: rgb(3, 3, 48);
   width: 800px;
   height: 600px;
@@ -10,18 +12,15 @@
   color: white;
 }
 
-.text {
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 30px;
+.position {
   width: 600px;
   height: 300px;
-  padding-left: 100px;
-  padding-top: 100px;
 }
 
-.typer {
-  color: rgb(6, 206, 6);
+.text {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  white-space: pre-wrap;
 }
 
 .button-row {

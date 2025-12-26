@@ -2,7 +2,6 @@ import { useState } from 'react'
 import data from './data/paragraphs.json'
 import Timer from './components/Timer'
 import Typer from './components/Typer'
-import Text from './components/Text'
 import './App.css'
 
 function App() {
@@ -27,11 +26,10 @@ function App() {
       <div className='timer'>
       <Timer startTime={start} seconds={seconds} setSeconds={setSeconds}/>
       </div>
-      <div className='text'>
-        <Text paragraph={paragraph}/>
-        <div className='typer'>
-          <Typer typing={typing} />
-          </div>
+      <div className='position'>
+        <div className='text'>
+          <Typer typing={typing} paragraph={paragraph}/>
+        </div>
       </div>
       <label>
           <input 
