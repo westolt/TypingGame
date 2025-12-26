@@ -22,6 +22,13 @@ const Typer = ({ typing, paragraph, correct }) => {
                     </span>
                     )
                 }
+                if (char === ' ') {
+                    return (
+                    <span key={index} className="incorrect">
+                    {typedChar + ' '}
+                    </span>
+                    )
+                }
                 return (
                     <span key={index} className="incorrect">
                     {char}

@@ -1,7 +1,6 @@
 const Input = ({ typing, targetWord, setCorrect, setCount, setTyping, setStart }) => {
     return(
-        <div>
-            <label>
+        <div className='input'>
             <input 
             type="text"
             value={typing}
@@ -16,16 +15,15 @@ const Input = ({ typing, targetWord, setCorrect, setCount, setTyping, setStart }
                 }
 
                 if (value === targetWord) {
-                setCorrect(prev => prev + value)
-                setCount(prev => prev + 1)
-                setTyping('')
+                    setCorrect(prev => prev + value)
+                    setCount(prev => prev + 1)
+                    setTyping('')
                 } else {
-                setTyping(value)
+                    setTyping(value)
                 }
                 setStart(true)
             }}
             />
-        </label>
         </div>
     )
 }

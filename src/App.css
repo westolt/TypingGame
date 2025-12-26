@@ -30,6 +30,14 @@
   justify-content: center;
 }
 
+.input input{
+  width: 100%;
+  font-size: 40px;
+  font-family: 'Verdana', 'Geneva', sans-serif;
+  padding: 10px 14px;
+  box-sizing: border-box;
+}
+
 .new-game {
   width: 3cm;
   height: 1cm;

@@ -41,7 +41,7 @@ function App() {
           <Typer typing={typing} paragraph={paragraph} correct={correct}/>
         </div>
       </div>
-      <div className='input'>
+      <div>
       <Input
         typing={typing}
         targetWord={targetWord}
