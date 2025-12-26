@@ -1,30 +1,41 @@
 import './typer.css'
 
-const Typer = ({ typing, paragraph }) => {
-
-    const charColors = paragraph.split('').map((char, index) => {
-
-        if (index < typing.length) {
-
-            if (typing[index] === char) {
-                return <span key={index} className='correct'>{char}</span>
-            }
-            
-            if (char === ' ') {
-                return (
-                    <span key={index} className="incorrect">{typing[index]}</span>
-                )
-            }
-
-            return <span key={index} className='incorrect'>{char}</span>
-        }
-        return <span key={index} style={{ color: 'white' }}>{char}</span>
-        })
+const Typer = ({ typing, paragraph, correct }) => {
 
     return(
         <div>
-            {charColors}
-        </div>
+        {paragraph.split('').map((char, index) => {
+            if (index < correct.length) {
+                return (
+                    <span key={index} className="correct">
+                    {char}
+                </span>
+                )
+            }
+
+            if (index < correct.length + typing.length) {
+                const typedChar = typing[index - correct.length]
+                if (typedChar === char) {
+                    return (
+                    <span key={index} className="correct">
+                        {char}
+                    </span>
+                    )
+                }
+                return (
+                    <span key={index} className="incorrect">
+                    {char}
+                    </span>
+                )
+            }
+
+            return (
+            <span key={index} className="neutral">
+                {char}
+            </span>
+            )
+        })}
+    </div>
     )
 }
 
