@@ -13,7 +13,8 @@ function App() {
   const [typing, setTyping] = useState('')
   const words = paragraph.split(' ')
   const [count, setCount] = useState(0)
-  const targetWord = words[count] + ' '
+  const isLastWord = count === words.length - 1
+  const targetWord = isLastWord ? words[count] : words[count] + ' '
   const [correct, setCorrect] = useState('')
   const [startTime, setStartTime] = useState(null)
 
@@ -43,18 +44,27 @@ function App() {
     }
 
     if (value === targetWord) {
-        setCorrect(prev => prev + value)
-        setCount(prev => prev + 1)
-        setTyping('')
+        setCorrect(prev => {
+          const newCorrect = prev + value
 
-        if (count + 1 === words.length) {
-          console.log('END!!')
-          const endTime = performance.now()
-          const durationMinutes = (endTime - startTime) / 1000 / 60
-          const wordCount = words.length
-          const wpm = wordCount / durationMinutes
-          console.log('WPM:', wpm.toFixed(2))
-      }
+          if (count + 1 === words.length) {
+            const endTime = performance.now()
+            const durationMinutes = (endTime - startTime) / 1000 / 60
+            const totalChars = newCorrect.length
+            const wpm = (totalChars / 5) / durationMinutes
+            console.log('Totall Chars: ', totalChars)
+            console.log('correct words: ', newCorrect)
+            console.log('Paragraph length: ', paragraph.length)
+            console.log('WPM:', wpm.toFixed(0))
+          }
+
+          return newCorrect
+        })
+        setCount(prev => {
+          console.log('New count:', prev + 1)
+          return prev + 1
+        })
+        setTyping('')
     } else {
         setTyping(value)
     }

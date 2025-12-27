@@ -8,9 +8,16 @@
   height: 600px;
 }
 
+.wpm {
+
+}
+
 .textbox{
+  display: flex;
   width: 600px;
-  height: 300px;
+  height: 200px;
+  align-items: flex-end;
+  padding-bottom: 50px;
 }
 
 .text {
