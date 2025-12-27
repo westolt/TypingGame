@@ -19,6 +19,7 @@ function App() {
   const startTimeRef = useRef(null)
   const [currentWpm, setCurrentWpm] = useState(0)
   const [finalWpm, setFinalWpm] = useState(0)
+  const [selectedTextId, setSelectedTextId] = useState('')
 
   useEffect(() => {
     setCount(0)
@@ -68,7 +69,6 @@ function App() {
             const totalChars = newCorrect.length
             const wpm = (totalChars / 5) / durationMinutes
             setFinalWpm(Math.round(wpm))
-            console.log('WPM:', wpm.toFixed(0))
           }
 
           return newCorrect
@@ -80,8 +80,32 @@ function App() {
     }
   }
 
-  const newGame = () => {
-    setParagraph(texts[Math.floor(Math.random() * texts.length)].text)
+  const random = () => {
+    let index = Math.floor(Math.random() * texts.length)
+    if (texts[index].text === paragraph) {
+      index = (index + 1) % texts.length
+    }
+    setParagraph(texts[index].text)
+    setSelectedTextId('')
+  }
+
+  const restart = () => {
+    setCount(0)
+    setCorrect('')
+    setTyping('')
+    setSelectedTextId('')
+    startTimeRef.current = null
+    setCurrentWpm(0)
+    setFinalWpm(0)
+  }
+
+  const choose = (id) => {
+    setSelectedTextId(id)
+
+    const selected = texts.find(text => text.id === Number(id))
+    if (selected) {
+      setParagraph(selected.text)
+    }
   }
 
   return(
@@ -101,9 +125,20 @@ function App() {
       />
       </div>
       <div className='button-row'>
-        <button className='new-game' onClick={newGame}>
-        New game
-      </button>
+        <button className='restart' onClick={restart}>
+          Restart
+        </button>
+        <button className='random' onClick={random}>
+          Random
+        </button>
+        <select value={selectedTextId} className='choose' onChange={e => choose(e.target.value)}>
+          <option value='' disabled>Choose text</option>
+          {texts.map(text => (
+            <option key={text.id} value={text.id}>
+              {text.name}
+            </option>
+          ))}
+        </select>
       </div>
   </div>
   )

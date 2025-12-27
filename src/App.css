@@ -26,7 +26,6 @@
 .text {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 30px;
-  white-space: pre-wrap;
 }
 
 .input input{
@@ -45,7 +44,7 @@
   padding-top: 10px;
 }
 
-.new-game {
+.random {
   width: 3cm;
   height: 1cm;
 }
