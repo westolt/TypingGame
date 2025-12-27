@@ -2,9 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import data from './data/paragraphs.json'
 import Input from './components/Input'
 import Typer from './components/Typer'
+import scoreService from './services/scores'
 import './App.css'
 
 function App() {
+  const urlParams = new URLSearchParams(window.location.search)
+  const gameId = Number(urlParams.get('id'))
 
   const texts = data.paragraphs
   const [paragraph, setParagraph] = useState(() => {
@@ -22,16 +25,24 @@ function App() {
   const [selectedTextId, setSelectedTextId] = useState('')
 
   useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      scoreService.setToken(user.token)
+    }
+  }, [])
+
+  const resetGame = () => {
     setCount(0)
     setCorrect('')
     setTyping('')
     startTimeRef.current = null
     setCurrentWpm(0)
     setFinalWpm(0)
-  }, [paragraph])
+  }
 
-  const handleTyping = (value) => {
-    if (!startTimeRef) {
+  const handleTyping = async (value) => {
+    if (!startTimeRef.current) {
       startTimeRef.current = performance.now()
     }
 
@@ -40,43 +51,49 @@ function App() {
     ))
 
     if (firstErrorIndex !== -1 && value.length > firstErrorIndex + 1) {
-    return
+      return
     }
 
     if (value === targetWord) {
-        if (!startTimeRef.current) {
-              startTimeRef.current = performance.now()
+        
+      const now = performance.now()
+      const elapsedMinutes = (now - startTimeRef.current) / 1000 / 60
+      
+      setCorrect(prev => {
+        const newCorrect = prev + value
+
+        const chars = newCorrect.length
+        const wpmNow = (chars / 5) / elapsedMinutes
+
+        if (elapsedMinutes < 0.03) {
+          setCurrentWpm(0)
+        } else {
+          setCurrentWpm(Math.round(wpmNow))
         }
-        
-        const now = performance.now()
-        const elapsedMinutes = (now - startTimeRef.current) / 1000 / 60
-        
-        setCorrect(prev => {
-          const newCorrect = prev + value
 
-          const chars = newCorrect.length
-          const wpmNow = (chars / 5) / elapsedMinutes
+        return newCorrect
+      })
 
-          if (elapsedMinutes < 0.03) {
-            setCurrentWpm(0)
-          } else {
-            setCurrentWpm(Math.round(wpmNow))
-          }
+      if (count + 1 === words.length) {
+        const endTime = performance.now()
+        const durationMinutes = (endTime - startTimeRef.current) / 1000 / 60
+        const totalChars = (correct + value).length
+        const wpm = (totalChars / 5) / durationMinutes
 
-          if (count + 1 === words.length) {
-            const endTime = performance.now()
-            const durationMinutes = (endTime - startTimeRef.current) / 1000 / 60
-            const totalChars = newCorrect.length
-            const wpm = (totalChars / 5) / durationMinutes
-            setFinalWpm(Math.round(wpm))
-          }
+        const finalScore = Math.round(wpm)
+        setFinalWpm(finalScore)
 
-          return newCorrect
-        })
-        setCount(prev => prev + 1)
-        setTyping('')
+        try {
+          await scoreService.sendScore({ score: finalScore, gameId: gameId })
+        } catch (err) {
+          console.log('Error sending score: ', err)
+        }
+      }
+
+      setCount(prev => prev + 1)
+      setTyping('')
     } else {
-        setTyping(value)
+      setTyping(value)
     }
   }
 
@@ -87,16 +104,12 @@ function App() {
     }
     setParagraph(texts[index].text)
     setSelectedTextId('')
+    resetGame()
   }
 
   const restart = () => {
-    setCount(0)
-    setCorrect('')
-    setTyping('')
+    resetGame()
     setSelectedTextId('')
-    startTimeRef.current = null
-    setCurrentWpm(0)
-    setFinalWpm(0)
   }
 
   const choose = (id) => {
@@ -105,6 +118,7 @@ function App() {
     const selected = texts.find(text => text.id === Number(id))
     if (selected) {
       setParagraph(selected.text)
+      resetGame()
     }
   }
 
