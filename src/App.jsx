@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import data from './data/paragraphs.json'
 import Input from './components/Input'
 import Typer from './components/Typer'
@@ -16,23 +16,22 @@ function App() {
   const isLastWord = count === words.length - 1
   const targetWord = isLastWord ? words[count] : words[count] + ' '
   const [correct, setCorrect] = useState('')
-  const [startTime, setStartTime] = useState(null)
+  const startTimeRef = useRef(null)
+  const [currentWpm, setCurrentWpm] = useState(0)
+  const [finalWpm, setFinalWpm] = useState(0)
 
   useEffect(() => {
     setCount(0)
     setCorrect('')
     setTyping('')
-    setStartTime(null)
+    startTimeRef.current = null
+    setCurrentWpm(0)
+    setFinalWpm(0)
   }, [paragraph])
 
-  const newGame = () => {
-    setParagraph(texts[Math.floor(Math.random() * texts.length)].text)
-  }
-
   const handleTyping = (value) => {
-    if (!startTime) {
-      setStartTime(performance.now())
-      console.log('START!!')
+    if (!startTimeRef) {
+      startTimeRef.current = performance.now()
     }
 
     const firstErrorIndex = value.split('').findIndex((char, i) => (
@@ -44,34 +43,52 @@ function App() {
     }
 
     if (value === targetWord) {
+        if (!startTimeRef.current) {
+              startTimeRef.current = performance.now()
+        }
+        
+        const now = performance.now()
+        const elapsedMinutes = (now - startTimeRef.current) / 1000 / 60
+        
         setCorrect(prev => {
           const newCorrect = prev + value
 
+          const chars = newCorrect.length
+          const wpmNow = (chars / 5) / elapsedMinutes
+
+          if (elapsedMinutes < 0.03) {
+            setCurrentWpm(0)
+          } else {
+            setCurrentWpm(Math.round(wpmNow))
+          }
+
           if (count + 1 === words.length) {
             const endTime = performance.now()
-            const durationMinutes = (endTime - startTime) / 1000 / 60
+            const durationMinutes = (endTime - startTimeRef.current) / 1000 / 60
             const totalChars = newCorrect.length
             const wpm = (totalChars / 5) / durationMinutes
-            console.log('Totall Chars: ', totalChars)
-            console.log('correct words: ', newCorrect)
-            console.log('Paragraph length: ', paragraph.length)
+            setFinalWpm(Math.round(wpm))
             console.log('WPM:', wpm.toFixed(0))
           }
 
           return newCorrect
         })
-        setCount(prev => {
-          console.log('New count:', prev + 1)
-          return prev + 1
-        })
+        setCount(prev => prev + 1)
         setTyping('')
     } else {
         setTyping(value)
     }
   }
 
+  const newGame = () => {
+    setParagraph(texts[Math.floor(Math.random() * texts.length)].text)
+  }
+
   return(
     <div className='game-box'>
+      <div className='wpm'>
+        <div>{finalWpm ? finalWpm : currentWpm} wpm</div>
+      </div>
       <div className='textbox'>
         <div className='text'>
           <Typer typing={typing} paragraph={paragraph} correct={correct}/>
