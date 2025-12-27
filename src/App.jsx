@@ -21,6 +21,7 @@ function App() {
     setCount(0)
     setCorrect('')
     setTyping('')
+    setStartTime(null)
   }, [paragraph])
 
   const newGame = () => {
