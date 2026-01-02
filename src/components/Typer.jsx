@@ -3,8 +3,10 @@ import './typer.css'
 const Typer = ({ typing, paragraph, correct }) => {
 
     return(
-        <div>
+        <div className='char'>
         {paragraph.split('').map((char, index) => {
+            const currentPos = correct.length + typing.length
+
             if (index < correct.length) {
                 return (
                     <span key={index} className="correct">
@@ -32,6 +34,14 @@ const Typer = ({ typing, paragraph, correct }) => {
                 return (
                     <span key={index} className="incorrect">
                     {char}
+                    </span>
+                )
+            }
+
+            if (index === currentPos) {
+                return(
+                    <span key={index} className='neutral cursor'>
+                        {char}
                     </span>
                 )
             }
