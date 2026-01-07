@@ -2,12 +2,14 @@ import { useState, useEffect, useRef } from 'react'
 import data from './data/paragraphs.json'
 import Input from './components/Input'
 import Typer from './components/Typer'
+import userService from './services/user'
 import scoreService from './services/scores'
 import './App.css'
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search)
   const gameId = Number(urlParams.get('id'))
+  const [user, setUser] = useState(null)
 
   const texts = data.paragraphs
   const [paragraph, setParagraph] = useState(() => {
@@ -27,8 +29,15 @@ function App() {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      scoreService.setToken(user.token)
+      const loggedUser = JSON.parse(loggedUserJSON)
+      scoreService.setToken(loggedUser.token)
+
+      userService.getOne(loggedUser.id).then(fullUser => {
+        setUser({
+          ...fullUser,
+          token: loggedUser.token
+        })
+      })
     }
   }, [])
 
@@ -82,11 +91,29 @@ function App() {
 
         const finalScore = Math.round(wpm)
         setFinalWpm(finalScore)
+        if (user) {
+          try {
+          const res = await scoreService.sendScore({ score: finalScore, gameId: gameId })
 
-        try {
-          await scoreService.sendScore({ score: finalScore, gameId: gameId })
+          if (res.unlockedRewards && res.unlockedRewards.length > 0) {
+            setUser(prev => {
+              const existingRewards = prev.unlockedRewards || []
+              const updatedRewards = [...existingRewards, ...res.unlockedRewards]
+              return {
+                ...prev,
+                unlockedRewards: updatedRewards
+              }
+            })
+
+            window.parent.postMessage({
+              type: 'SCORE_UPDATE',
+              userId: user.id,
+              token: user.token
+            }, window.location.origin)
+          }
         } catch (err) {
           console.log('Error sending score: ', err)
+        }
         }
       }
 
