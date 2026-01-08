@@ -5,6 +5,7 @@ import Typer from './components/Typer'
 import userService from './services/user'
 import scoreService from './services/scores'
 import './App.css'
+import './fonts.css'
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search)
@@ -25,6 +26,7 @@ function App() {
   const [currentWpm, setCurrentWpm] = useState(0)
   const [finalWpm, setFinalWpm] = useState(0)
   const [selectedTextId, setSelectedTextId] = useState('')
+  const [gameFont, setGameFont] = useState(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -37,9 +39,13 @@ function App() {
           ...fullUser,
           token: loggedUser.token
         })
+        const equippedGameFont = fullUser.equippedRewards.find(
+        r => r.slot === 'GAME_FONT' && r.gameId === gameId
+      ) || null
+      setGameFont(equippedGameFont)
       })
     }
-  }, [])
+  }, [gameId])
 
   const resetGame = () => {
     setCount(0)
@@ -156,7 +162,7 @@ function App() {
       </div>
       <div className='textbox'>
         <div className='text'>
-          <Typer typing={typing} paragraph={paragraph} correct={correct}/>
+          <Typer typing={typing} paragraph={paragraph} correct={correct} gameFont={gameFont} />
         </div>
       </div>
       <div>

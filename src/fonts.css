@@ -1,0 +1,57 @@
+.font-1 {
+    color: #ff95a7;
+}
+
+.font-3 {
+    color: #84ff74;
+}
+
+.font-2 {
+    background: linear-gradient(90deg, #ff6ec4, #7873f5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.font-4 {
+    color: #00fff7;
+    text-shadow:
+        0 0 5px #00fff7,
+        0 0 10px #00fff7,
+        0 0 20px #00fff7,
+        0 0 40px #7873f5;
+}
+
+.font-5 {
+    background: linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    violet
+    );
+    background-size: 400% 400%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    animation: rainbowMove 8s ease infinite;
+}
+
+@keyframes rainbowMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

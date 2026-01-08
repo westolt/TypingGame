@@ -1,6 +1,6 @@
 import './typer.css'
 
-const Typer = ({ typing, paragraph, correct }) => {
+const Typer = ({ typing, paragraph, correct, gameFont }) => {
 
     return(
         <div className='char'>
@@ -9,7 +9,7 @@ const Typer = ({ typing, paragraph, correct }) => {
 
             if (index < correct.length) {
                 return (
-                    <span key={index} className="correct">
+                    <span key={index} className={`correct ${gameFont ? `font-${gameFont.rewardId}` : ''}`}>
                     {char}
                 </span>
                 )
@@ -19,7 +19,7 @@ const Typer = ({ typing, paragraph, correct }) => {
                 const typedChar = typing[index - correct.length]
                 if (typedChar === char) {
                     return (
-                    <span key={index} className="correct">
+                    <span key={index} className={`correct ${gameFont ? `font-${gameFont.rewardId}` : ''}`}>
                         {char}
                     </span>
                     )
