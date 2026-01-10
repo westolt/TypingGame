@@ -157,8 +157,8 @@ function App() {
 
   return(
     <div className='game-box'>
-      <div className='wpm'>
-        <div>{finalWpm ? finalWpm : currentWpm} wpm</div>
+      <div className='wpm_row'>
+        <div className='wpm'>{finalWpm ? finalWpm : currentWpm} wpm</div>
       </div>
       <div className='textbox'>
         <div className='text'>
