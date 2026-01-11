@@ -2,7 +2,7 @@
 
 This game is made with React and it is part of my full stack arcade project [Statcade](https://github.com/westolt/Statcade.git).
 
-Texts used in this game are from Wikipedia (CC BY-SA 3.0):
+Texts used in this game are from Wikipedia (CC BY-SA 4.0):
 
 [Coffee](https://en.wikipedia.org/wiki/Coffee)
 
